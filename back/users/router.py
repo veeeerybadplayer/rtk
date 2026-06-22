@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from rtk.back.users import uservices
-from rtk.back.users.schemas import SUser
+from rtk.back.users.schemas import SUser, SLogin
 from rtk.back.users import authreg
 
 router = APIRouter(tags=["/users"])
@@ -15,8 +15,8 @@ async def reg_user(user_data: SUser):
     return {"message": "Пользователь успешно зарегистрирован"}
 
 @router.post("/login")
-async def login_user(email: str, password: str):
-    user = await authreg.authenticate_user(email, password)
+async def login_user(requiredata: SLogin):
+    user = await authreg.authenticate_user(email=requiredata.email, password=requiredata.password)
     if not user:
         raise HTTPException(status_code=401, detail="Неверный email или пароль")
     
@@ -32,3 +32,7 @@ async def login_user(email: str, password: str):
             "rank": user.rank
         }
     }
+
+@router.get("/get_info")
+async def get_u_and_t(cur_auth: tuple = Depends(authreg.get_current_user_and_token)):
+    return cur_auth

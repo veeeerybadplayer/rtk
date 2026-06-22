@@ -7,3 +7,7 @@ class SUser(BaseModel):
     email: EmailStr
     pwd: str
     last_entry: datetime
+
+class SLogin(BaseModel):
+    email: EmailStr
+    password: str

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from rtk.back.users import router as RUser
-from rtk.back.qrgen import router as Rqr
+from rtk.back.users.router import router as RUser
+from rtk.back.qrgen.router import router as Rqr
 
 app = FastAPI()
 app.include_router(RUser)
