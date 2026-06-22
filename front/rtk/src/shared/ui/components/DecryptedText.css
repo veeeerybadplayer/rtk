@@ -1,0 +1,26 @@
+.decrypted-text {
+  font-family: var(--font-family);
+  transition: opacity 0.3s ease;
+}
+
+.decrypted-text.decrypting {
+  opacity: 0.7;
+}
+
+.decrypted-text.decrypted {
+  opacity: 1;
+}
+
+/* Animation for the text */
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(119, 0, 255, 0.3);
+  }
+}
+
+.decrypted-text.decrypting {
+  animation: textGlow 1.5s ease-in-out infinite;
+}

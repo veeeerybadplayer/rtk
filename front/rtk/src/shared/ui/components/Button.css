@@ -1,45 +1,72 @@
 .button {
-  padding: 10px 20px;
+  padding: 0 16px;
+  height: 36px;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-fast);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.02857em;
+  line-height: 2.25rem;
+  font-family: var(--font-family);
+  position: relative;
+  overflow: hidden;
+  outline: none;
 }
 
 /* Variants */
 .button--primary {
   background-color: var(--primary-color);
-  color: white;
-  box-shadow: var(--shadow-sm);
+  color: var(--text-on-primary);
+  box-shadow: var(--shadow-1);
 }
 
 .button--primary:hover:not(:disabled) {
   background-color: var(--primary-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
 }
 
 .button--primary:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-1);
+}
+
+/* Ripple Effect */
+.button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.button:active::after {
+  width: 200px;
+  height: 200px;
 }
 
 .button--secondary {
   background-color: transparent;
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .button--secondary:hover:not(:disabled) {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: rgba(119, 0, 255, 0.04);
+  border-color: var(--primary-dark);
 }
 
 .button--ghost {
@@ -53,18 +80,21 @@
 
 /* Sizes */
 .button--sm {
-  padding: 6px 12px;
-  font-size: 0.875rem;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.8125rem;
 }
 
 .button--md {
-  padding: 10px 20px;
-  font-size: 1rem;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 0.875rem;
 }
 
 .button--lg {
-  padding: 14px 28px;
-  font-size: 1.125rem;
+  height: 48px;
+  padding: 0 24px;
+  font-size: 1rem;
 }
 
 /* Full Width */
@@ -74,6 +104,7 @@
 
 /* Disabled State */
 .button:disabled {
-  opacity: 0.5;
+  opacity: 0.38;
   cursor: not-allowed;
+  pointer-events: none;
 }

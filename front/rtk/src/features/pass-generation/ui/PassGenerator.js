@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePassStore } from '../model/passStore';
-import { Button } from '../../../shared/ui/components';
+import { Button, Lanyard3D } from '../../../shared/ui/components';
 import './PassGenerator.css';
 
 export const PassGenerator = () => {
@@ -24,9 +24,11 @@ export const PassGenerator = () => {
           </div>
           
           <div className="qr-container">
-            <div className="qr-code">
-              {qrCode}
-            </div>
+            <Lanyard3D 
+              qrData={qrCode}
+              position={[0, 0, 20]}
+              gravity={[0, -40, 0]}
+            />
             <p className="qr-hint">Покажите QR-код на проходной</p>
           </div>
 

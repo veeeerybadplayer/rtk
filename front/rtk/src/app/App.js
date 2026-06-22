@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuthStore } from '../features/auth/model/authStore';
 import { RegisterPage, LoginPage } from '../pages';
 import { PassGenerator } from '../features/pass-generation/ui';
+import { DecryptedText } from '../shared/ui/components';
 import './App.css';
 
 // Protected Route компонент
@@ -17,18 +18,38 @@ const DashboardPage = () => {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-content">
-        <h1>Добро пожаловать!</h1>
-        <p className="user-info">Вы вошли как: <strong>{user?.fio || user?.email}</strong></p>
-        <p className="user-rank">{user?.rank}</p>
-        
-        <div className="pass-section">
-          <PassGenerator />
+      <div className="dashboard-header">
+        <div className="dashboard-brand">
+          <span className="dashboard-logo">РТК</span>
+          <DecryptedText 
+            text="Цифровой пропуск" 
+            className="dashboard-title"
+            speed={30}
+            delay={500}
+          />
         </div>
-
-        <button onClick={logout} className="logout-button">
+        <button onClick={logout} className="dashboard-logout">
           Выйти
         </button>
+      </div>
+
+      <div className="dashboard-content">
+        <div className="dashboard-welcome">
+          <DecryptedText 
+            text={`Добро пожаловать, ${user?.fio?.split(' ')[0] || 'Пользователь'}!`}
+            className="welcome-text"
+            speed={40}
+            delay={800}
+            as="h1"
+          />
+          <p className="welcome-subtitle">
+            {user?.rank}
+          </p>
+        </div>
+
+        <div className="dashboard-main">
+          <PassGenerator />
+        </div>
       </div>
     </div>
   );
