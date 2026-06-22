@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './PixelTransition.css';
 
@@ -6,8 +6,8 @@ export const PixelTransition = ({
   isActive, 
   children, 
   className = '',
-  pixelSize = 10,
-  duration = 0.8 
+  pixelSize = 20,
+  duration = 0.6 
 }) => {
   const [pixels, setPixels] = useState([]);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -19,15 +19,15 @@ export const PixelTransition = ({
     }
   }, [isActive, isAnimating]);
 
-  const generatePixels = () => {
+  const generatePixels = useCallback(() => {
     const newPixels = [];
-    const cols = Math.ceil(400 / pixelSize);
-    const rows = Math.ceil(400 / pixelSize);
+    const cols = Math.ceil(window.innerWidth / pixelSize);
+    const rows = Math.ceil(window.innerHeight / pixelSize);
     
     for (let i = 0; i < cols * rows; i++) {
       const col = i % cols;
       const row = Math.floor(i / cols);
-      const delay = (col + row) * 0.01;
+      const delay = (col + row) * 0.005;
       
       newPixels.push({
         id: i,
@@ -39,7 +39,7 @@ export const PixelTransition = ({
     }
     
     setPixels(newPixels);
-  };
+  }, [pixelSize]);
 
   return (
     <div className={`pixel-transition-container ${className}`}>
@@ -73,7 +73,7 @@ export const PixelTransition = ({
                   opacity: 1,
                 }}
                 transition={{
-                  duration: 0.4,
+                  duration: 0.3,
                   delay: pixel.delay,
                   ease: 'easeOut',
                 }}

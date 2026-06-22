@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { usePassStore } from '../model/passStore';
-import { Button, Lanyard3D } from '../../../shared/ui/components';
+import { Button, Lanyard3D, PixelTransition } from '../../../shared/ui/components';
 import './PassGenerator.css';
 
 export const PassGenerator = () => {
+  const [use3D, setUse3D] = useState(false);
   const { passData, qrCode, isLoading, isPassActive, error, generatePass, deactivatePass } = usePassStore();
 
   const handleGeneratePass = () => {
@@ -24,12 +25,35 @@ export const PassGenerator = () => {
           </div>
           
           <div className="qr-container">
-            <Lanyard3D 
-              qrData={qrCode}
-              position={[0, 0, 20]}
-              gravity={[0, -40, 0]}
-            />
+            {use3D ? (
+              <Lanyard3D 
+                qrData={qrCode}
+                position={[0, 0, 20]}
+                gravity={[0, -40, 0]}
+              />
+            ) : (
+              <PixelTransition isActive={true} pixelSize={50} duration={0.8}>
+                <div className="qr-code">
+                  {qrCode}
+                </div>
+              </PixelTransition>
+            )}
             <p className="qr-hint">Покажите QR-код на проходной</p>
+          </div>
+          
+          <div className="qr-toggle">
+            <button 
+              className={`toggle-button ${!use3D ? 'active' : ''}`}
+              onClick={() => setUse3D(false)}
+            >
+              Простой QR
+            </button>
+            <button 
+              className={`toggle-button ${use3D ? 'active' : ''}`}
+              onClick={() => setUse3D(true)}
+            >
+              3D Бейдж
+            </button>
           </div>
 
           <div className="pass-info">
