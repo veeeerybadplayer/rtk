@@ -1,37 +1,46 @@
 import { create } from 'zustand';
-import { PASS_TIMEOUT } from '../../../shared/constants';
+import { passAPI } from '../api/passAPI';
 
 export const usePassStore = create((set) => ({
-  pass: null,
+  passData: null,
   qrCode: null,
   isLoading: false,
   error: null,
-  expiresAt: null,
-  isActive: false,
+  isPassActive: false,
 
-  setPass: (pass) => set({ pass }),
-  setQRCode: (qrCode) => set({ qrCode }),
-  setLoading: (isLoading) => set({ isLoading }),
-  setError: (error) => set({ error }),
-  setActive: (isActive) => set({ isActive }),
-
-  generatePass: (passData) => {
-    const expiresAt = Date.now() + PASS_TIMEOUT;
-    set({
-      pass: passData,
-      expiresAt,
-      isActive: true,
-      error: null,
-    });
-
-    // Таймер для автоматического скрытия пропуска
-    const timer = setTimeout(() => {
-      set({ isActive: false });
-    }, PASS_TIMEOUT);
-
-    return timer;
+  generatePass: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await passAPI.generatePass();
+      set({
+        passData: response,
+        qrCode: response.qr_code,
+        isLoading: false,
+        isPassActive: true,
+      });
+      
+      // Auto-deactivate after 5 minutes
+      setTimeout(() => {
+        set({ isPassActive: false, passData: null, qrCode: null });
+      }, 5 * 60 * 1000);
+      
+    } catch (error) {
+      set({
+        error: error.response?.data?.detail || 'Ошибка генерации пропуска',
+        isLoading: false,
+      });
+    }
   },
 
-  hidePass: () => set({ isActive: false, pass: null, qrCode: null }),
-  clearPass: () => set({ pass: null, qrCode: null, expiresAt: null, isActive: false }),
+  deactivatePass: () => {
+    set({
+      passData: null,
+      qrCode: null,
+      isPassActive: false,
+      error: null,
+    });
+  },
+
+  setError: (error) => set({ error }),
+  setLoading: (isLoading) => set({ isLoading }),
 }));

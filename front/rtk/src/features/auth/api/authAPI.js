@@ -3,16 +3,13 @@ import { API_ENDPOINTS } from '../../../shared/config/api';
 import { mockAuthAPI, isMockEnabled } from '../../../shared/api/mockAPI';
 
 export const authAPI = {
-  register: async (email, password) => {
+  register: async (userData) => {
     if (isMockEnabled()) {
       console.log('🧪 Используется Mock API (развитие)');
-      return mockAuthAPI.register(email, password);
+      return mockAuthAPI.register(userData.email, userData.password);
     }
 
-    const response = await httpClient.post(API_ENDPOINTS.REGISTER, {
-      email,
-      password,
-    });
+    const response = await httpClient.post(API_ENDPOINTS.REGISTER, userData);
     return response.data;
   },
 

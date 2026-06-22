@@ -1,9 +1,9 @@
 /* Color Scheme - Ростелеком SaaS */
 :root {
-  --primary-color: #7c3aed;       /* Фиолетовый - основной цвет */
-  --primary-light: #8b5cf6;       /* Фиолетовый светлый */
-  --primary-dark: #6d28d9;        /* Фиолетовый тёмный */
-  --secondary-color: #06b6d4;     /* Бирюзовый - акцент */
+  --primary-color: #7700ff;       /* Основной фиолетовый РТК */
+  --primary-light: #8a33ff;       /* Светлый фиолетовый */
+  --primary-dark: #5f00d4;        /* Тёмный фиолетовый */
+  --secondary-color: #ff4f12;     /* Оранжевый акцент РТК */
   --success-color: #10b981;       /* Зелёный - успех */
   --error-color: #ef4444;         /* Красный - ошибка */
   --warning-color: #f59e0b;       /* Оранжевый - предупреждение */
@@ -58,4 +58,88 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Page Layout */
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Dashboard */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  padding: 20px;
+}
+
+.dashboard-content {
+  background: white;
+  padding: 48px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.dashboard-content h1 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  font-size: 2rem;
+}
+
+.dashboard-content p {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  font-size: 1.125rem;
+}
+
+.user-info {
+  margin-bottom: 8px !important;
+}
+
+.user-rank {
+  color: var(--primary-color) !important;
+  font-weight: 500;
+  margin-bottom: 32px !important;
+}
+
+.pass-section {
+  margin: 40px 0;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logout-button {
+  padding: 12px 32px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.logout-button:hover {
+  background-color: #e6440f;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }

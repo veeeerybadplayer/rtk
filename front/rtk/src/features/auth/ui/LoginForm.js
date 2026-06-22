@@ -5,13 +5,10 @@ import { authAPI } from '../api/authAPI';
 import { STORAGE_KEYS } from '../../../shared/constants';
 import './RegisterForm.css';
 
-export const RegisterForm = ({ onSuccess }) => {
+export const LoginForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    fio: '',
-    rank: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -23,14 +20,6 @@ export const RegisterForm = ({ onSuccess }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.fio) {
-      newErrors.fio = 'ФИО обязательно';
-    }
-
-    if (!formData.rank) {
-      newErrors.rank = 'Должность обязательна';
-    }
-
     if (!formData.email) {
       newErrors.email = 'Email обязателен';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -41,12 +30,6 @@ export const RegisterForm = ({ onSuccess }) => {
       newErrors.password = 'Пароль обязателен';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Пароль должен быть минимум 6 символов';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Подтверждение пароля обязательно';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Пароли не совпадают';
     }
 
     setErrors(newErrors);
@@ -77,8 +60,8 @@ export const RegisterForm = ({ onSuccess }) => {
     setIsLoading(true);
 
     try {
-      console.log('Отправка регистрации для:', formData.email);
-      const response = await authAPI.register(formData);
+      console.log('Отправка входа для:', formData.email);
+      const response = await authAPI.login(formData.email, formData.password);
       console.log('Ответ сервера:', response);
 
       localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.access_token);
@@ -88,26 +71,22 @@ export const RegisterForm = ({ onSuccess }) => {
       setAuthenticated(true);
 
       setFormData({
-        fio: '',
-        rank: '',
         email: '',
         password: '',
-        confirmPassword: '',
       });
 
-      console.log('Регистрация успешна!');
+      console.log('Вход успешен!');
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      console.error('Ошибка регистрации:', error);
+      console.error('Ошибка входа:', error);
       console.error('Ответ ошибки:', error.response);
       
       const errorMessage = 
-        error.response?.data?.detail || 
         error.response?.data?.message || 
         error.message ||
-        'Ошибка при регистрации. Проверьте подключение к серверу.';
+        'Ошибка при входе. Проверьте подключение к серверу.';
       
       setErrors({
         submit: errorMessage,
@@ -119,8 +98,8 @@ export const RegisterForm = ({ onSuccess }) => {
 
   return (
     <FormContainer
-      title="Регистрация"
-      subtitle="Создайте аккаунт для входа в здание"
+      title="Вход"
+      subtitle="Войдите в свой аккаунт"
     >
       <form onSubmit={handleSubmit} className="register-form">
         {errors.submit && (
@@ -128,30 +107,6 @@ export const RegisterForm = ({ onSuccess }) => {
             {errors.submit}
           </div>
         )}
-
-        <Input
-          label="ФИО"
-          name="fio"
-          type="text"
-          placeholder="Иванов Иван Иванович"
-          value={formData.fio}
-          onChange={handleChange}
-          error={errors.fio}
-          required
-          disabled={isLoading}
-        />
-
-        <Input
-          label="Должность"
-          name="rank"
-          type="text"
-          placeholder="Сотрудник"
-          value={formData.rank}
-          onChange={handleChange}
-          error={errors.rank}
-          required
-          disabled={isLoading}
-        />
 
         <Input
           label="Email"
@@ -177,32 +132,20 @@ export const RegisterForm = ({ onSuccess }) => {
           disabled={isLoading}
         />
 
-        <Input
-          label="Подтверждение пароля"
-          name="confirmPassword"
-          type="password"
-          placeholder="••••••••"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          error={errors.confirmPassword}
-          required
-          disabled={isLoading}
-        />
-
         <Button
           type="submit"
           fullWidth
           disabled={isLoading}
           className="register-button"
         >
-          {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
+          {isLoading ? 'Вход...' : 'Войти'}
         </Button>
 
         <div className="form-footer">
           <p className="form-footer-text">
-            Уже есть аккаунт?{' '}
-            <a href="/login" className="form-footer-link">
-              Войти
+            Нет аккаунта?{' '}
+            <a href="/register" className="form-footer-link">
+              Зарегистрироваться
             </a>
           </p>
         </div>
@@ -211,4 +154,4 @@ export const RegisterForm = ({ onSuccess }) => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

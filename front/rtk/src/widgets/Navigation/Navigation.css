@@ -1,0 +1,122 @@
+.auth-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  background-color: var(--bg-secondary);
+  color: var(--primary-color);
+}
+
+.nav-link--active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.nav-link--active:hover {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+.nav-user {
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 8px 16px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-right: 8px;
+}
+
+.nav-logout {
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-logout:hover {
+  background-color: #e6440f;
+  transform: translateY(-1px);
+}
+
+.auth-navigation.authenticated {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-bottom: none;
+}
+
+.auth-navigation.authenticated .nav-logo {
+  background: white;
+  color: var(--primary-color);
+}
+
+.auth-navigation.authenticated .nav-title {
+  color: white;
+}
+
+.auth-navigation.authenticated .nav-link {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.auth-navigation.authenticated .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.auth-navigation.authenticated .nav-link--active {
+  background-color: white;
+  color: var(--primary-color);
+}
+
+.auth-navigation.authenticated .nav-link--active:hover {
+  background-color: var(--bg-secondary);
+  color: var(--primary-color);
+}

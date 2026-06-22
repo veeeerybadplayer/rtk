@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RegisterForm } from '../features/auth/ui';
+import { LoginForm } from '../features/auth/ui';
 import { Navigation } from '../widgets/Navigation';
 
-export const RegisterPage = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const handleRegistrationSuccess = () => {
-    // Редирект на dashboard или главную
+  const handleLoginSuccess = () => {
+    // Редирект на dashboard после успешного входа
     navigate('/dashboard');
   };
 
@@ -15,10 +15,10 @@ export const RegisterPage = () => {
     <div className="page-container">
       <Navigation />
       <div className="page-content">
-        <RegisterForm onSuccess={handleRegistrationSuccess} />
+        <LoginForm onSuccess={handleLoginSuccess} />
       </div>
     </div>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
