@@ -5,7 +5,7 @@ class SUser(BaseModel):
     fio: str
     rank: str
     email: EmailStr
-    pwd: str
+    pwd_h: str
     last_entry: datetime
 
 class SLogin(BaseModel):

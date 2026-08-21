@@ -1,5 +1,5 @@
 from pydantic import model_validator, field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DB_host: str
@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     crypt_key: str
     crypt_algo: str
 
+    model_config = SettingsConfigDict(env_file=".env")
+
     @model_validator(mode="after")
     def get_db_url(self):
         self.DB_URL = (
@@ -20,8 +22,5 @@ class Settings(BaseSettings):
 
     RDS_host: str 
     RDS_port: str
-
-    class Config:
-        env_file = ".env"
 
 settings = Settings()
