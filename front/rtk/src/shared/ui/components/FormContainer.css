@@ -1,51 +1,16 @@
-.form-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
-  padding: 20px;
-  position: relative;
-}
-
-.form-card {
-  width: 100%;
-  max-width: 420px;
-  background-color: var(--surface-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-4);
-  padding: 40px;
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 .form-header {
   margin-bottom: 32px;
-  text-align: center;
 }
 
 .form-title {
   font-size: 1.75rem;
-  font-weight: 400;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 8px;
-  letter-spacing: -0.00833em;
 }
 
 .form-subtitle {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
@@ -54,22 +19,5 @@
 .form-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .form-card {
-    padding: 32px 24px;
-    max-width: 100%;
-    box-shadow: var(--shadow-3);
-  }
-
-  .form-title {
-    font-size: 1.5rem;
-  }
-  
-  .form-container {
-    padding: 16px;
-  }
+  gap: 20px;
 }

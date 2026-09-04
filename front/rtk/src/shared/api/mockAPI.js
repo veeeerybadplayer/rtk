@@ -1,47 +1,59 @@
 // Mock API для локального тестирования (без backend)
-// Используй это для разработки, а потом удали
+// Повторяет реальный контракт бэкенда: /login и /get_info возвращают
+// пользователя в JSON, а сама сессия держится на (эмулированной) cookie,
+// поэтому здесь она хранится в переменной модуля, а не в localStorage.
 
-const MOCK_ENABLED = process.env.REACT_APP_MOCK_API === 'true';
+const MOCK_ENABLED = import.meta.env.VITE_MOCK_API === 'true';
+
+// Минимальный валидный PNG 1x1 — заглушка под base64 QR-код с реального бэка
+const MOCK_QR_PNG =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+let mockLoggedInUser = null;
 
 export const mockAuthAPI = {
   register: async (email, password) => {
-    // Имитируем задержку сервера
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (!email || !password) {
       throw new Error('Email и пароль обязательны');
     }
 
-    // Имитируем успешный ответ в формате бэкенда
-    return {
-      access_token: 'mock_token_' + Math.random().toString(36).substr(2, 9),
-      refresh_token: 'mock_refresh_' + Math.random().toString(36).substr(2, 9),
-      user: {
-        id: '1',
-        email: email,
-        fio: 'Тестовый Пользователь',
-        rank: 'Сотрудник',
-      },
-    };
+    // Реальный бэкенд не логинит пользователя при регистрации
+    return { message: 'Пользователь успешно зарегистрирован' };
   },
 
   login: async (email, password) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (!email || !password) {
       throw new Error('Email и пароль обязательны');
     }
 
-    return {
-      access_token: 'mock_token_' + Math.random().toString(36).substr(2, 9),
-      refresh_token: 'mock_refresh_' + Math.random().toString(36).substr(2, 9),
-      user: {
-        id: '1',
-        email: email,
-        fio: 'Тестовый Пользователь',
-        rank: 'Сотрудник',
-      },
+    mockLoggedInUser = {
+      id: '1',
+      email,
+      fio: 'Тестовый Пользователь',
+      rank: 'Сотрудник',
     };
+
+    return { message: 'Успешный вход', user: mockLoggedInUser };
+  },
+
+  logout: async () => {
+    mockLoggedInUser = null;
+  },
+
+  getCurrentUser: async () => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    if (!mockLoggedInUser) {
+      const error = new Error('Не авторизован');
+      error.response = { status: 401, data: { detail: 'Не авторизован' } };
+      throw error;
+    }
+
+    return mockLoggedInUser;
   },
 };
 
@@ -49,24 +61,11 @@ export const isMockEnabled = () => MOCK_ENABLED;
 
 export const mockPassAPI = {
   generatePass: async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Генерируем случайный QR код (в реальности это будет с бэкенда)
-    const qrData = `PASS-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
-    return {
-      id: '1',
-      qr_code: qrData,
-      created_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
-      status: 'active',
-    };
-  },
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  getPassStatus: async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
     return {
-      status: 'active',
+      token: `mock-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      qr_code: MOCK_QR_PNG,
       expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
     };
   },

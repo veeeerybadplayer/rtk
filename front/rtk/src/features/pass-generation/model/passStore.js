@@ -13,7 +13,8 @@ export const usePassStore = create((set) => ({
     try {
       const response = await passAPI.generatePass();
       set({
-        passData: response,
+        // Бэкенд не отдаёт created_at, фиксируем время получения пропуска на фронте
+        passData: { ...response, created_at: new Date().toISOString() },
         qrCode: response.qr_code,
         isLoading: false,
         isPassActive: true,

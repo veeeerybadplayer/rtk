@@ -60,11 +60,8 @@ export const LoginForm = ({ onSuccess }) => {
     setIsLoading(true);
 
     try {
-      console.log('Отправка входа для:', formData.email);
       const response = await authAPI.login(formData.email, formData.password);
-      console.log('Ответ сервера:', response);
 
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.access_token);
       localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
 
       setUser(response.user);
@@ -75,15 +72,11 @@ export const LoginForm = ({ onSuccess }) => {
         password: '',
       });
 
-      console.log('Вход успешен!');
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      console.error('Ошибка входа:', error);
-      console.error('Ответ ошибки:', error.response);
-      
-      const errorMessage = 
+      const errorMessage =
         error.response?.data?.message || 
         error.message ||
         'Ошибка при входе. Проверьте подключение к серверу.';

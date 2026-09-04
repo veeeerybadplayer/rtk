@@ -3,19 +3,23 @@ import { API_ENDPOINTS } from '../../../shared/config/api';
 import { mockAuthAPI, isMockEnabled } from '../../../shared/api/mockAPI';
 
 export const authAPI = {
-  register: async (userData) => {
+  // Бэкенд ожидает поле `pwd_h` под пароль и не принимает confirmPassword
+  register: async ({ fio, rank, email, password }) => {
     if (isMockEnabled()) {
-      console.log('🧪 Используется Mock API (развитие)');
-      return mockAuthAPI.register(userData.email, userData.password);
+      return mockAuthAPI.register(email, password);
     }
 
-    const response = await httpClient.post(API_ENDPOINTS.REGISTER, userData);
+    const response = await httpClient.post(API_ENDPOINTS.REGISTER, {
+      fio,
+      rank,
+      email,
+      pwd_h: password,
+    });
     return response.data;
   },
 
   login: async (email, password) => {
     if (isMockEnabled()) {
-      console.log('🧪 Используется Mock API (развитие)');
       return mockAuthAPI.login(email, password);
     }
 
@@ -28,10 +32,21 @@ export const authAPI = {
 
   logout: async () => {
     if (isMockEnabled()) {
-      return { success: true };
+      return mockAuthAPI.logout();
     }
 
     const response = await httpClient.post(API_ENDPOINTS.LOGOUT);
+    return response.data;
+  },
+
+  // Токен лежит в httpOnly cookie и недоступен из JS, поэтому статус
+  // авторизации после перезагрузки страницы проверяется этим запросом
+  getCurrentUser: async () => {
+    if (isMockEnabled()) {
+      return mockAuthAPI.getCurrentUser();
+    }
+
+    const response = await httpClient.get(API_ENDPOINTS.GET_INFO);
     return response.data;
   },
 };

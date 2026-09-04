@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, FormContainer } from '../../../shared/ui/components';
-import { useAuthStore } from '../model/authStore';
 import { authAPI } from '../api/authAPI';
-import { STORAGE_KEYS } from '../../../shared/constants';
 import './RegisterForm.css';
 
 export const RegisterForm = ({ onSuccess }) => {
@@ -16,9 +14,6 @@ export const RegisterForm = ({ onSuccess }) => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
-  const setUser = useAuthStore((state) => state.setUser);
-  const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
 
   const validateForm = () => {
     const newErrors = {};
@@ -77,15 +72,9 @@ export const RegisterForm = ({ onSuccess }) => {
     setIsLoading(true);
 
     try {
-      console.log('Отправка регистрации для:', formData.email);
-      const response = await authAPI.register(formData);
-      console.log('Ответ сервера:', response);
-
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.access_token);
-      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
-
-      setUser(response.user);
-      setAuthenticated(true);
+      // Бэкенд только создаёт учётку и не логинит пользователя — сессия
+      // (cookie) появится после отдельного входа на /login
+      await authAPI.register(formData);
 
       setFormData({
         fio: '',
@@ -95,15 +84,11 @@ export const RegisterForm = ({ onSuccess }) => {
         confirmPassword: '',
       });
 
-      console.log('Регистрация успешна!');
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      console.error('Ошибка регистрации:', error);
-      console.error('Ответ ошибки:', error.response);
-      
-      const errorMessage = 
+      const errorMessage =
         error.response?.data?.detail || 
         error.response?.data?.message || 
         error.message ||
