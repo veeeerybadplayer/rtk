@@ -6,7 +6,7 @@ class SUser(BaseModel):
     rank: str
     email: EmailStr
     pwd_h: str
-    last_entry: datetime
+    last_entry: datetime = None
 
 class SLogin(BaseModel):
     email: EmailStr

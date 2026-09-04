@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select, delete
 from rtk.back.db import async_session_maker
+from rtk.back.users.model import MUser
 
 class BaseService:
     model = None
@@ -38,3 +39,6 @@ class BaseService:
             query = delete(cls.model).where(cls.model.id == id)
             await session.execute(query)
             await session.commit()
+
+class UService(BaseService):
+    model = MUser
