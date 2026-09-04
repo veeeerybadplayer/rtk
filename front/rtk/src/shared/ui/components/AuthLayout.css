@@ -87,6 +87,7 @@
   height: 20px;
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
   border-radius: var(--radius-round);
   font-size: 0.6875rem;
   margin-top: 1px;
@@ -119,10 +120,18 @@
 @media (max-width: 900px) {
   .auth-layout {
     grid-template-columns: 1fr;
+    /* Без этого пустая на мобилке брендовая полоса растягивается
+       на всю высоту grid-строки и съедает весь экран */
+    grid-auto-rows: min-content;
+    align-content: start;
   }
 
   .auth-layout-brand {
-    padding: 28px 24px;
+    padding: 20px 24px;
+  }
+
+  .auth-layout-form {
+    min-height: calc(100vh - 76px);
   }
 
   .auth-brand-copy {

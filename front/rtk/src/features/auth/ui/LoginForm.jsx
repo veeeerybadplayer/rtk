@@ -5,9 +5,9 @@ import { authAPI } from '../api/authAPI';
 import { STORAGE_KEYS } from '../../../shared/constants';
 import './RegisterForm.css';
 
-export const LoginForm = ({ onSuccess }) => {
+export const LoginForm = ({ onSuccess, initialEmail = '', successMessage = null }) => {
   const [formData, setFormData] = useState({
-    email: '',
+    email: initialEmail,
     password: '',
   });
 
@@ -95,6 +95,12 @@ export const LoginForm = ({ onSuccess }) => {
       subtitle="Войдите в свой аккаунт"
     >
       <form onSubmit={handleSubmit} className="register-form">
+        {!errors.submit && successMessage && (
+          <div className="form-success-message">
+            {successMessage}
+          </div>
+        )}
+
         {errors.submit && (
           <div className="form-error-message">
             {errors.submit}

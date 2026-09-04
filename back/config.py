@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import model_validator, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,7 +13,10 @@ class Settings(BaseSettings):
     crypt_key: str
     crypt_algo: str
 
-    model_config = SettingsConfigDict(env_file=".env")
+    # Абсолютный путь, чтобы .env находился независимо от текущей
+    # рабочей директории (импорт пакета требует запуска из rtk-case,
+    # на уровень выше, а не из back/)
+    model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parent / ".env")
 
     @model_validator(mode="after")
     def get_db_url(self):

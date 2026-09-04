@@ -95,9 +95,9 @@
 }
 
 .app-header-logout:hover {
-  border-color: var(--error-color);
-  color: var(--error-color);
-  background-color: rgba(229, 62, 62, 0.06);
+  border-color: var(--border-dark);
+  color: var(--text-primary);
+  background-color: var(--bg-hover);
 }
 
 @media (max-width: 640px) {

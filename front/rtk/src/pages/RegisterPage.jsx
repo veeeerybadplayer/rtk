@@ -5,9 +5,10 @@ import { AuthLayout } from '../shared/ui/components';
 export const RegisterPage = () => {
   const navigate = useNavigate();
 
-  const handleRegistrationSuccess = () => {
-    // Бэкенд не логинит пользователя при регистрации — ведём на вход
-    navigate('/login');
+  // Бэкенд не логинит пользователя при регистрации — ведём на вход
+  // и передаём email, чтобы человеку не пришлось вводить его заново
+  const handleRegistrationSuccess = (email) => {
+    navigate('/login', { state: { justRegistered: true, email } });
   };
 
   return (

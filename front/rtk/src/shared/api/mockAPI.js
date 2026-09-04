@@ -2,12 +2,9 @@
 // Повторяет реальный контракт бэкенда: /login и /get_info возвращают
 // пользователя в JSON, а сама сессия держится на (эмулированной) cookie,
 // поэтому здесь она хранится в переменной модуля, а не в localStorage.
+import QRCode from 'qrcode';
 
 const MOCK_ENABLED = import.meta.env.VITE_MOCK_API === 'true';
-
-// Минимальный валидный PNG 1x1 — заглушка под base64 QR-код с реального бэка
-const MOCK_QR_PNG =
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
 let mockLoggedInUser = null;
 
@@ -63,9 +60,16 @@ export const mockPassAPI = {
   generatePass: async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
+    const token = `mock-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    // Настоящий backend генерирует QR на сервере (qrcode + Pillow) и отдаёт
+    // base64 PNG. В моке рисуем такой же настоящий QR прямо в браузере,
+    // чтобы контракт (и то, что видит пользователь) совпадал с боевым.
+    const dataUrl = await QRCode.toDataURL(token, { margin: 1, width: 320 });
+    const qr_code = dataUrl.replace(/^data:image\/png;base64,/, '');
+
     return {
-      token: `mock-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-      qr_code: MOCK_QR_PNG,
+      token,
+      qr_code,
       expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
     };
   },

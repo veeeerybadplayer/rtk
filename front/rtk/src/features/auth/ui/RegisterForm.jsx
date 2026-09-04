@@ -76,6 +76,8 @@ export const RegisterForm = ({ onSuccess }) => {
       // (cookie) появится после отдельного входа на /login
       await authAPI.register(formData);
 
+      const registeredEmail = formData.email;
+
       setFormData({
         fio: '',
         rank: '',
@@ -85,7 +87,7 @@ export const RegisterForm = ({ onSuccess }) => {
       });
 
       if (onSuccess) {
-        onSuccess();
+        onSuccess(registeredEmail);
       }
     } catch (error) {
       const errorMessage =

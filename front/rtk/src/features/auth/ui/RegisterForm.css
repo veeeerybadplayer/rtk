@@ -23,6 +23,24 @@
   font-size: 1rem;
 }
 
+.form-success-message {
+  padding: 14px 16px;
+  background-color: rgba(18, 183, 106, 0.08);
+  border-left: 4px solid var(--success-color);
+  border-radius: var(--radius-sm);
+  color: var(--success-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-success-message::before {
+  content: '✓';
+  font-size: 1rem;
+}
+
 @keyframes shake {
   0%, 100% {
     transform: translateX(0);

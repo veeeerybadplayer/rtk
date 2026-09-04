@@ -9,12 +9,11 @@ export const httpClient = axios.create({
   },
 });
 
+// Намеренно без глобального редиректа на 401: /get_info штатно отвечает 401,
+// когда пользователь просто не залогинен (например, зашёл на /register), и
+// это не повод его никуда перекидывать. Реальный гейтинг делают
+// authStore.checkAuth() и ProtectedRoute в App.js.
 httpClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401 && window.location.pathname !== '/login') {
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
