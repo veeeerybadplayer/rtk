@@ -38,6 +38,27 @@ class QRService:
             return result.scalar_one_or_none()
 
     @classmethod
+    async def cancel_for_user(cls, user_id: int) -> bool:
+        """
+        Delete any active QR code belonging to this user (self-service
+        cancellation from the app, as opposed to /scan consuming it at the
+        door). Returns True if a pass was actually deleted.
+        """
+        async with async_session_maker() as session:
+            query = (
+                delete(cls.model)
+                .where(cls.model.user_id == user_id)
+                .returning(cls.model.id)
+            )
+
+            result = await session.execute(query)
+            deleted_ids = result.scalars().all()
+
+            await session.commit()
+
+            return len(deleted_ids) > 0
+
+    @classmethod
     async def consume(cls, token: str):
         """
         Atomically delete the QR code if it exists and has not expired.

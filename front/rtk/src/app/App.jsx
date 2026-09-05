@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../features/auth/model/authStore';
+import { usePassStore } from '../features/pass-generation/model/passStore';
 import { RegisterPage, LoginPage } from '../pages';
 import { PassGenerator } from '../features/pass-generation/ui';
 import { DecryptedText } from '../shared/ui/components';
@@ -50,6 +51,17 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // На любой переход в разлогиненное состояние (ручной logout или протухшая
+  // сессия) чистим QR-пропуск — иначе следующий пользователь в той же вкладке
+  // увидит и сможет использовать чужой ещё живой пропуск
+  useEffect(() => {
+    return useAuthStore.subscribe((state, prevState) => {
+      if (prevState.isAuthenticated && !state.isAuthenticated) {
+        usePassStore.getState().deactivatePass();
+      }
+    });
+  }, []);
 
   if (!isInitialized) {
     return null;

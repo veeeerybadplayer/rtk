@@ -72,6 +72,24 @@ async def generation(
     }
 
 
+@router.post("/cancel")
+async def cancel(
+    current_user=Depends(get_current_user),
+):
+    cancelled = await QRService.cancel_for_user(current_user.id)
+
+    if not cancelled:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Активный пропуск не найден",
+        )
+
+    return {
+        "success": True,
+        "message": "Пропуск отменён",
+    }
+
+
 @router.post(
     "/scan",
 )

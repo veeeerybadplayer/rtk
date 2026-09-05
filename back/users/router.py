@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, Response
+from sqlalchemy.exc import IntegrityError
 
 from rtk.back.users.uservices import UService
 from rtk.back.users.schemas import SUser, SLogin
@@ -26,12 +27,21 @@ async def reg_user(user_data: SUser):
         user_data.pwd_h
     )
 
-    await UService.add(
-        fio=user_data.fio,
-        rank=user_data.rank,
-        email=user_data.email,
-        password_hash=hashed_password,
-    )
+    try:
+        await UService.add(
+            fio=user_data.fio,
+            rank=user_data.rank,
+            email=user_data.email,
+            password_hash=hashed_password,
+        )
+    except IntegrityError:
+        # Гонка: два параллельных запроса прошли проверку find_one_or_none
+        # выше одновременно — уникальный constraint на email в БД спасает
+        # от дублей, здесь просто превращаем его в понятный 409
+        raise HTTPException(
+            status_code=409,
+            detail="Юзер уже есть"
+        )
 
     return {
         "message": "Пользователь успешно зарегистрирован"

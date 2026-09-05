@@ -73,4 +73,9 @@ export const mockPassAPI = {
       expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
     };
   },
+
+  cancelPass: async () => {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    return { success: true, message: 'Пропуск отменён' };
+  },
 };

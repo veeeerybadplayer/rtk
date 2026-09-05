@@ -10,4 +10,5 @@ export const API_ENDPOINTS = {
 
   // Pass
   GENERATE_PASS: '/qr/generation',
+  CANCEL_PASS: '/qr/cancel',
 };

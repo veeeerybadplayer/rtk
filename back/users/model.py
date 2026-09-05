@@ -20,7 +20,8 @@ class MUser(Base):
 
     email: Mapped[str] = mapped_column(
         String,
-        nullable=False
+        nullable=False,
+        unique=True,
     )
 
     password_hash: Mapped[str] = mapped_column(

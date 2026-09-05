@@ -11,4 +11,13 @@ export const passAPI = {
     const response = await httpClient.post(API_ENDPOINTS.GENERATE_PASS);
     return response.data;
   },
+
+  cancelPass: async () => {
+    if (isMockEnabled()) {
+      return mockPassAPI.cancelPass();
+    }
+
+    const response = await httpClient.post(API_ENDPOINTS.CANCEL_PASS);
+    return response.data;
+  },
 };
